@@ -1,0 +1,22 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  web:
+    build: .
+    volumes:
+    - ./templates:/etc/nginx/templates
+    - ./certbot/www:/var/www/certbot/:ro
+    ports:
+    - "80:80"
+    - "9443:443"
+    links:
+        - php
+  php:
+    image: php:8.1.2-fpm
+    volumes: 
+    - ./App:/App
+    ports: 
+    - "9000:9000"
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
